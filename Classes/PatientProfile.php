@@ -112,7 +112,7 @@ class PatientProfile {
         if (!$result)
             return false;
         $row = mysql_fetch_assoc($result);
-      
+
         $this->id = $row['id'];
         $this->name = $row['name'];
         $this->age = $row['age'];
@@ -125,10 +125,33 @@ class PatientProfile {
         return true;
     }
 
+    public static function getAll() {
+        $sql = "SELECT * FROM patient";
+
+        $result = mysql_query($sql);
+        if (!$result)
+            return false;
+        $row = mysql_fetch_assoc($result);
+        if (!$result)
+            return false;
+        $patients = array();
+        while ($row = mysql_fetch_assoc($result)) {
+            $patients[$row['id']] = new PatientProfile();
+            $patients[$row['id']]->load($row['id']);
+        }
+        return $patients;
+    }
+    
+    public static function deleteById($id){
+         $sql = "DELETE FROM patient 
+                 WHERE id = {$id}";
+
+        $result = mysql_query($sql);
+        if (!$result)
+            return false;
+        return true;
+    }
+
 }
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 ?>

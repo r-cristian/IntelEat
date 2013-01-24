@@ -6,7 +6,7 @@ $genders = HelpClass::getGenders();
 $diabetesTypes = HelpClass::getDiabetesTypes();
 $lifestyles = HelpClass::getLifestyles();
 
-if(isset($_GET['delete'])){
+if (isset($_GET['delete'])) {
     PatientProfile::deleteById($_GET['delete']);
 }
 
@@ -24,39 +24,38 @@ $patients = PatientProfile::getAll();
         </h1>
         </br>
         </br>
-        <form action="" method="post">
-            <table class="list">
-                <tbody>
-                    <tr>
-                        <th >
-                            Name
-                        </th>
-                        <th>
-                            Age
-                        </th>
-                        <th>
-                            Gender
-                        </th>
-                        <th>
-                            Height
-                        </th>
-                        <th>
-                            Weight
-                        </th>
-                        <th>
-                            Lifestyle
-                        </th>
-                        <th>
-                            Diabetes type
-                        </th>
-                        <th>
-                            Options
-                        </th>                      
-                    </tr>
-                    <?php
-                    if (count($patients) > 0) {
-                        foreach ($patients as $key => $patient) {
-                            echo "<tr>
+        <table class="list">
+            <tbody>
+                <tr>
+                    <th >
+                        Name
+                    </th>
+                    <th>
+                        Age
+                    </th>
+                    <th>
+                        Gender
+                    </th>
+                    <th>
+                        Height
+                    </th>
+                    <th>
+                        Weight
+                    </th>
+                    <th>
+                        Lifestyle
+                    </th>
+                    <th>
+                        Diabetes type
+                    </th>
+                    <th>
+                        Options
+                    </th>                      
+                </tr>
+                <?php
+                if (count($patients) > 0) {
+                    foreach ($patients as $key => $patient) {
+                        echo "<tr>
                                     <td>{$patient->getName()}
                                     </td>
                                     <td>{$patient->getAge()}
@@ -74,13 +73,13 @@ $patients = PatientProfile::getAll();
                                     <td>
                                     <a href=\"profile.php?patient={$key}\" ><image width=\"15px\" height=\"15px\" src=\"images/edit.png\" alt=\"edit\"/></a>
                                     <a href=\"patientsList.php?delete={$key}\" ><image width=\"15px\" height=\"15px\" src=\"images/delete.png\" alt=\"delete\"/></a>
+                                    <a href=\"dishesList.php?patient={$key}\" >Diet</a>
                                     </td>
                                  </tr>";
-                        }
                     }
-                    ?>  
-                </tbody>                
-            </table>
-        </form>
+                }
+                ?>  
+            </tbody>                
+        </table>       
     </body>
 </html>

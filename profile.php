@@ -62,10 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //nothing to do
     }
 }
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -172,5 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </br>
             <a href="<?php echo $redirectUrl . '?patient=' . $patient->getId() ?>"> Edit patient profile...</a>
         <?php endif ?>
+            </br></br>
+            <a href="patientsList.php"> Go to Patients list</a>
     </body>
 </html>

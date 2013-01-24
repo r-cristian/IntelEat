@@ -1,6 +1,8 @@
 <?php
 
 include_once($_SERVER['DOCUMENT_ROOT'] . '/config/dbconfig.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/Classes/PreparationMode.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/Classes/DishNutrient.php');
 
 class Dish {
 
@@ -8,6 +10,7 @@ class Dish {
     private $name;
     private $quantityPerPortion;
     private $preparationMode;
+    private $portionUnit;
     private $calories;
     private $nutrients;
 
@@ -21,6 +24,14 @@ class Dish {
 
     public function setName($name) {
         $this->name = $name;
+    }
+    
+     public function getPortionUnit() {
+        return $this->portionUnit;
+    }
+
+    public function setPosrtionUnit($portionUnit) {
+        $this->portionUnit = $portionUnit;
     }
 
     public function getQuantityPerPortion() {
@@ -70,41 +81,33 @@ class Dish {
 
         $this->id = $row['id'];
         $this->name = $row['name'];
-        $this->quantityPerPortion = $row['age'];
+        $this->quantityPerPortion = $row['quantityPerPortion'];
         $this->preparationMode = PreparationMode::getAllByDishId($row['id']);
-        $this->calories = $row['calories'];       
-        $this->nutrients = Nutrient::getAllByDishId($row['id']);
+        $this->calories = $row['calories']; 
+        $this->portionUnit = $row['portionUnit']; 
+        $this->nutrients = DishNutrient::getAllByDishId($row['id']);
 
         return true;
     }
 
     public static function getAll() {
-        $sql = "SELECT * FROM patient";
+        $sql = "SELECT * FROM dish";
 
         $result = mysql_query($sql);
         if (!$result)
             return false;
-        $row = mysql_fetch_assoc($result);
-        if (!$result)
-            return false;
-        $patients = array();
+       
+        $dishes = array();
         while ($row = mysql_fetch_assoc($result)) {
-            $patients[$row['id']] = new PatientProfile();
-            $patients[$row['id']]->load($row['id']);
+            $dishes[$row['id']] = new Dish();
+            $dishes[$row['id']]->load($row['id']);
         }
-        return $patients;
+        return $dishes;
     }
-
-    public static function deleteById($id) {
-        $sql = "DELETE FROM patient 
-                 WHERE id = {$id}";
-
-        $result = mysql_query($sql);
-        if (!$result)
-            return false;
-        return true;
+    
+    public static function getAllForPatient($patientId) {
+        return self::getAll();
     }
-
 }
 
 ?>

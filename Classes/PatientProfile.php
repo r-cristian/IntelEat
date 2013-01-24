@@ -130,10 +130,7 @@ class PatientProfile {
 
         $result = mysql_query($sql);
         if (!$result)
-            return false;
-        $row = mysql_fetch_assoc($result);
-        if (!$result)
-            return false;
+            return false;        
         $patients = array();
         while ($row = mysql_fetch_assoc($result)) {
             $patients[$row['id']] = new PatientProfile();

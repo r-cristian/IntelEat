@@ -11,11 +11,27 @@ class HelpClass {
         if (!$result) {
             die("Query didn't work. " . mysql_error());
         }
+        $units = array();
         while ($row = mysql_fetch_assoc($result)) {
             $genders[$row['id']] = $row['name'];
         }
 
         return $genders;
+    }
+    
+   public static function getUnits() {
+        $sql = "SELECT * FROM unit";
+
+        $result = mysql_query($sql);
+        if (!$result) {
+            die("Query didn't work. " . mysql_error());
+        }
+        $units = array();
+        while ($row = mysql_fetch_assoc($result)) {
+            $units[$row['id']] = $row['name'];
+        }
+
+        return $units;
     }
 
     public static function getDiabetesTypes() {

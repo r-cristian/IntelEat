@@ -5,7 +5,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/config/dbconfig.php');
 class PreparationMode {
 
     private $id = null;
-    private $name;    
+    private $name;
 
     public function getId() {
         return $this->id;
@@ -22,8 +22,8 @@ class PreparationMode {
     public function __construct() {
         
     }
-    
-   public function load($id) {
+
+    public function load($id) {
         $sql = "SELECT * FROM preparationMode 
                 WHERE id = {$id}";
 
@@ -33,7 +33,7 @@ class PreparationMode {
         $row = mysql_fetch_assoc($result);
 
         $this->id = $row['id'];
-        $this->name = $row['name'];          
+        $this->name = $row['name'];
 
         return true;
     }
@@ -48,9 +48,7 @@ class PreparationMode {
                 WHERE dish.id = {$id}";
 
         $result = mysql_query($sql);
-        if (!$result)
-            return false;
-        $row = mysql_fetch_assoc($result);
+
         if (!$result)
             return false;
         $preparationModes = array();
@@ -70,15 +68,13 @@ class PreparationMode {
         $row = mysql_fetch_assoc($result);
         if (!$result)
             return false;
-           $nutrients = array();
+        $modes = array();
         while ($row = mysql_fetch_assoc($result)) {
-            $nutrients[$row['id']] = new Nutrient();
-            $nutrients[$row['id']]->load($row['id']);
+            $modes[$row['id']] = new PreparationMode();
+            $modes[$row['id']]->load($row['id']);
         }
-        return $nutrients;
+        return $modes;
     }
-
-
 
 }
 

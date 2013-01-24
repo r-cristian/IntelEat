@@ -10,15 +10,20 @@ root {
     display: block;
 }
 
+td{
+    padding:5px;
+}
+
 table.list td{
-    padding:10px;
+    padding:5px;
     margin: 0;
     border: 1px solid;
     text-align: center;
+    vertical-align: middle;
 }
 
 table.list th{
-    padding:10px;
+    padding:5px;
     margin: 0;
     border: 1px solid;
     text-align: center;
@@ -30,5 +35,18 @@ table.list{
     border-collapse: collapse;
     margin: 0;
     text-align: center;
+}
+
+ul.modes{
+    list-style: none;
+     vertical-align: middle;
+}
+
+li{
+    text-align: left;    
+}
+
+a:visited{
+   color: blue; 
 }
 

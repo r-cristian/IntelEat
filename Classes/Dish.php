@@ -13,6 +13,7 @@ class Dish {
     private $portionUnit;
     private $calories;
     private $nutrients;
+    private $dishType;
 
     public function getId() {
         return $this->id;
@@ -25,12 +26,12 @@ class Dish {
     public function setName($name) {
         $this->name = $name;
     }
-    
-     public function getPortionUnit() {
+
+    public function getPortionUnit() {
         return $this->portionUnit;
     }
 
-    public function setPosrtionUnit($portionUnit) {
+    public function setPortionUnit($portionUnit) {
         $this->portionUnit = $portionUnit;
     }
 
@@ -42,12 +43,16 @@ class Dish {
         $this->quantityPerPortion = $quantityPerPortion;
     }
 
-    public function getPreparationMode() {
+    public function getPreparationModes() {
         return $this->preparationMode;
     }
 
-    public function setPreparationMode($preparationMode) {
-        $this->preparationMode = $preparationMode;
+    public function getDishType() {
+        return $this->dishType;
+    }
+
+    public function setDishType($dishType) {
+        $this->dishType = $dishType;
     }
 
     public function getCalories() {
@@ -83,9 +88,10 @@ class Dish {
         $this->name = $row['name'];
         $this->quantityPerPortion = $row['quantityPerPortion'];
         $this->preparationMode = PreparationMode::getAllByDishId($row['id']);
-        $this->calories = $row['calories']; 
-        $this->portionUnit = $row['portionUnit']; 
+        $this->calories = $row['calories'];
+        $this->portionUnit = $row['portionUnit'];
         $this->nutrients = DishNutrient::getAllByDishId($row['id']);
+        $this->dishType = $row['dishType'];
 
         return true;
     }
@@ -96,7 +102,7 @@ class Dish {
         $result = mysql_query($sql);
         if (!$result)
             return false;
-       
+
         $dishes = array();
         while ($row = mysql_fetch_assoc($result)) {
             $dishes[$row['id']] = new Dish();
@@ -104,10 +110,11 @@ class Dish {
         }
         return $dishes;
     }
-    
+
     public static function getAllForPatient($patientId) {
-        return self::getAll();
+        return HelpClass::assessDishes($patientId);
     }
+
 }
 
 ?>

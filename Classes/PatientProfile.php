@@ -72,6 +72,14 @@ class PatientProfile {
     public function setDiabetesType($diabetesType) {
         $this->diabetesType = $diabetesType;
     }
+    
+    public function getBMI(){
+        return $this->height / ($this->weight * $this->weight);
+    }
+    
+    public function getPlanningRule(){
+        return PlanningRule::getByPatientProfile($this);
+    }
 
     public function __construct() {
         

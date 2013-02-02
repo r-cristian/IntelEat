@@ -47,6 +47,13 @@ li{
 }
 
 a:visited{
-   color: blue; 
+   color: orange; 
 }
 
+a{
+   color: orange; 
+}
+
+h1{
+    color:#98BF21;
+}

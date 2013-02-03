@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 02, 2013 at 11:48 PM
+-- Generation Time: Feb 03, 2013 at 08:01 PM
 -- Server version: 5.5.29-0ubuntu0.12.10.1
 -- PHP Version: 5.4.6-1ubuntu1.1
 
@@ -101,7 +101,7 @@ INSERT INTO `dish` (`id`, `name`, `quantityPerPortion`, `portionUnit`, `calories
 CREATE TABLE IF NOT EXISTS `dishNutrients` (
   `dishId` int(11) NOT NULL,
   `nutrientId` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
+  `quantity` float NOT NULL,
   PRIMARY KEY (`dishId`,`nutrientId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -266,7 +266,8 @@ INSERT INTO `patient` (`id`, `name`, `age`, `gender`, `height`, `weight`, `lifes
 CREATE TABLE IF NOT EXISTS `planningRuleOutput` (
   `nutrientId` int(11) NOT NULL,
   `ruleId` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
+  `minQuantity` int(11) NOT NULL,
+  `maxQuantity` int(11) NOT NULL,
   PRIMARY KEY (`nutrientId`,`ruleId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -286,6 +287,8 @@ CREATE TABLE IF NOT EXISTS `planningRules` (
   `lifestyleId` int(11) NOT NULL,
   `diabetesTypeId` int(11) NOT NULL,
   `KCal` int(11) NOT NULL,
+  `provideDiet` tinyint(1) NOT NULL DEFAULT '1',
+  `hint` varchar(500) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 

@@ -17,7 +17,7 @@ if (isset($_GET['patient'])) {
     $patient->load($_GET['patient']);
 }
 if ($patient) {
-    $diets = HelpClass::getDiet($_GET['patient']);
+    $diets = Diet::getDiet($_GET['patient']);
     $impNutrients = DishNutrient::getAllImportantNutrients();
 } else {
     $diets[1] = Dish::getAll();
@@ -82,9 +82,10 @@ if ($patient) {
         <?php endif ?>
         </br>
         </br>
-        <?php if (isset($diets)): ?>
-            <?php foreach ($diets as $day->$dishes): ?>                
-                <?php if ($patient): ?>
+      
+        <?php if(isset($diets)): ?>
+            <?php foreach($diets as $day=>$dishes): ?>                
+                <?php if($patient): ?>
                     <h2>Day <?php echo $day; ?></h2>
                 <?php endif; ?>
                 <table class="list">

@@ -72,50 +72,19 @@ class Diet {
         $addedValues = array();
         $dietDishes = array();
         foreach ($rule->getOutputs() as $output) {
-            $otherRecommendedValues[$output->getNutrientId()] = $output->getQuantity();
+            $otherRecommendedValues[$output->getNutrientId()] = array('min' => $output->getMinQuantity(), 'max' => $output->getMaxQuantity());
             $addedValues[$output->getNutrientId()] = 0;
         }
-        foreach ($dishes as $dish) {
-            $nutrients = $dish->getNutrients();
-            $calories = $dish->getCalories();
-            if ($addedKcal + ($calories / 1000) - ($acceptedError * $recommendedKcal) < $recommendedKcal) {
-                $addDish = true;
-                foreach ($otherRecommendedValues as $nutrient => $recommendedValue) {
-                    if ($addedValues[$nutrient] + ($nutrients[$nutrient]) > $recommendedValue + ($acceptedError * $recommendedValue)) {
-                        $addDish = false;
-                    }
-                }
-                if ($addDish) {
-                    $dietDishes[$dish->getId()] = $dish;
-                    $addedKcal += $calories;
-                    foreach ($otherRecommendedValues as $nutrient => $recommendedValue) {
-                        $addedValues[$nutrient] += $nutrients[$nutrient];
-                    }
-                }
-            }
-        }
-        return $dietDishes;
-    }
 
-    public static function planDailyDiet($dishes, $alreadyPlannedDishes, PlanningRule $rule) {
-        $dishes = HelpClass::shuffle_assoc($dishes);
-        $acceptedError = 2 / 100;
-        $recommendedKcal = $rule->getKCal();
-        $otherRecommendedValues = array();
-        $addedKcal = $rule->getKCal();
-        $addedValues = array();
-        $dietDishes = array();
-        foreach ($rule->getOutputs() as $output) {
-            $otherRecommendedValues[$output->getNutrientId()] = $output->getQuantity();
-        }
-        foreach ($dishes as $dish) {
-            if (!key_exists($dish->getId(), $alreadyPlannedDishes)) {
+        $minsFullfilled = false;
+        while ($minsFullfilled === false) {
+            foreach ($dishes as $dish) {
                 $nutrients = $dish->getNutrients();
                 $calories = $dish->getCalories();
                 if ($addedKcal + ($calories / 1000) - ($acceptedError * $recommendedKcal) < $recommendedKcal) {
                     $addDish = true;
                     foreach ($otherRecommendedValues as $nutrient => $recommendedValue) {
-                        if ($addedValues[$nutrient] + ($nutrients[$nutrient]) > $recommendedValue + ($acceptedError * $recommendedValue)) {
+                        if ($addedValues[$nutrient] + ($nutrients[$nutrient]) > $recommendedValue['max'] + ($acceptedError * $recommendedValue['max'])) {
                             $addDish = false;
                         }
                     }
@@ -128,21 +97,25 @@ class Diet {
                     }
                 }
             }
-        }
-        if ($addedKcal + 10 / 100 * $recommendedKcal < $recommendedKcal) {
-            $dietDishes = self::planDailyDietWORestrictions($dishes, $rule);
+            $allMins = true;
+            foreach ($otherRecommendedValues as $nutrient => $recommendedValue) {
+                if ($addedValues[$nutrient] < $recommendedValue['min']) {
+                    $allMins = false;
+                }
+            }
+            if ($allMins) {
+                $minsFullfilled = true;
+            }
         }
         return $dietDishes;
     }
 
     public static function planWeeklyDiet($dishes, PlanningRule $rule) {
         $counter = 1;
-        // $alreadyPlannedDishes = array();
         $dailyDiets = array();
         while (count($dailyDiets) < 50) {
             $dailyDiets[$counter] = self::planDailyDietWORestrictions($dishes, $rule);
             $counter++;
-            //$alreadyPlannedDishes = $alreadyPlannedDishes + $dailyDiets[$counter];
         }
         $dishTypes = HelpClass::getDishTypes();
         $foundWeeklyDiet = false;
@@ -185,10 +158,14 @@ class Diet {
     public static function getDiet($patientId) {
         $dishes = self::assessDishes($patientId);
         $patient = new PatientProfile();
-        $diets = array();
         $patient->load($patientId);
+        
+        $rule = $patient->getPlanningRule();
+        if($rule->getProvideDiet() == 0){
+            return $rule->getHint();
+        }
 
-        return self::planWeeklyDiet($dishes, $patient->getPlanningRule());
+        return self::planWeeklyDiet($dishes, $rule);
     }
 
 }

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 03, 2013 at 08:01 PM
+-- Generation Time: Feb 03, 2013 at 11:07 PM
 -- Server version: 5.5.29-0ubuntu0.12.10.1
 -- PHP Version: 5.4.6-1ubuntu1.1
 
@@ -37,12 +37,12 @@ CREATE TABLE IF NOT EXISTS `assessmentRules` (
 --
 
 INSERT INTO `assessmentRules` (`id`, `text`) VALUES
-(1, 'if(dish.nutrient.4 > 20) return true;'),
+(1, 'if(dish.nutrient.4 > 6) return true;'),
 (2, 'if(dish.preparationMode.2) return true; '),
-(3, 'if(dish.nutrient.2 > 19) return true;'),
-(4, 'if(dish.nutrient.7 > 13) return true;'),
+(3, 'if(dish.nutrient.2 > 25) return true;'),
+(4, 'if(dish.nutrient.7 > 0.1) return true;'),
 (5, 'if(dish.nutrient.9 > 0) return true;'),
-(6, 'if(dish.nutrient.2 / dish.nutrient.1 > 1) return true;');
+(6, 'if((dish.nutrient.2 / dish.nutrient.1) > 8 && (dish.nutrient.2 + dish.nutrient.3) > 18) return true;');
 
 -- --------------------------------------------------------
 
@@ -197,9 +197,7 @@ CREATE TABLE IF NOT EXISTS `lifestyle` (
 
 INSERT INTO `lifestyle` (`id`, `name`) VALUES
 (1, 'sedentary'),
-(2, 'midly active'),
-(3, 'active'),
-(4, 'very active');
+(2, 'active');
 
 -- --------------------------------------------------------
 

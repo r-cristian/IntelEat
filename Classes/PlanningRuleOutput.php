@@ -6,7 +6,8 @@ class PlanningRuleOutput {
 
     private $ruleId = null;
     private $nutrientId;
-    private $quantity;
+    private $minQuantity;
+    private $maxQuantity;
 
     public function getRuleId() {
         return $this->ruleId;
@@ -16,10 +17,14 @@ class PlanningRuleOutput {
         return $this->nutrientId;
     }
 
-    public function getQuantity() {
-        return $this->quantity;
+    public function getMinQuantity() {
+        return $this->minQuantity;
     }
 
+    public function getMaxQuantity() {
+        return $this->maxQuantity;
+    }
+    
     public function __construct() {
         
     }
@@ -35,7 +40,8 @@ class PlanningRuleOutput {
 
         $this->ruleId = $row['ruleId'];
         $this->nutrientId = $row['nutrientId'];
-        $this->quantity = $row['quantity'];
+        $this->minQuantity = $row['minQuantity'];
+        $this->maxQuantity = $row['maxQuantity'];
 
         return true;
     }

@@ -11,6 +11,8 @@ class PlanningRule {
     private $lifestyle;
     private $diabetesType;
     private $KCal;
+    private $provideDiet;
+    private $hint;
     private $outputs = array();
 
     public function getId() {
@@ -81,10 +83,26 @@ class PlanningRule {
         $this->KCal = $Kcal;
     }
 
-    public function getOutputs(){
+    public function getProvideDiet() {
+        return $this->provideDiet;
+    }
+
+    public function setProvideDiet($provideDiet) {
+        $this->provideDiet = $provideDiet;
+    }
+
+    public function getHint() {
+        return $this->hint;
+    }
+
+    public function setHint($hint) {
+        $this->hint = $hint;
+    }
+
+    public function getOutputs() {
         return $this->outputs;
     }
-    
+
     public function __construct() {
         
     }
@@ -108,6 +126,8 @@ class PlanningRule {
         $this->diabetesType = $row['diabetesTypeId'];
         $this->KCal = $row['KCal'];
         $this->outputs = PlanningRuleOutput::getAllByRuleId($row['id']);
+        $this->provideDiet = $row['provideDiet'];
+        $this->hint = $row['hint'];
 
         return true;
     }

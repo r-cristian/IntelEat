@@ -18,6 +18,14 @@ if (isset($_GET['patient'])) {
 }
 if ($patient) {
     $diets = Diet::getDiet($_GET['patient']);
+    $hint = null;
+    if (!is_array($diets)) {
+        $hint = $diets;
+        unset($diets);
+    } else {
+        $rule = $patient->getPlanningRule();
+        $hint = $rule->getHint();
+    }
     $impNutrients = DishNutrient::getAllImportantNutrients();
 } else {
     $diets[1] = Dish::getAll();
@@ -82,10 +90,14 @@ if ($patient) {
         <?php endif ?>
         </br>
         </br>
-      
-        <?php if(isset($diets)): ?>
-            <?php foreach($diets as $day=>$dishes): ?>                
-                <?php if($patient): ?>
+        <?php if (isset($hint) && !empty($hint)): ?>
+            <h2>Profile advice: </h2> </br>
+            <span <?php if (!isset($diets)) echo 'style="color:red;"' ?>><?php echo $hint; ?></span>
+
+        <?php endif; ?>
+        <?php if (isset($diets)): ?>
+            <?php foreach ($diets as $day => $dishes): ?>                
+                <?php if ($patient): ?>
                     <h2>Day <?php echo $day; ?></h2>
                 <?php endif; ?>
                 <table class="list">

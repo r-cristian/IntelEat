@@ -147,16 +147,15 @@ class PlanningRule {
         return $rules;
     }
 
-    public static function getByPatientProfile(PatientProfile $patientProfile) {
+    public static function getByPatientProfile(PatientProfile $patientProfile) {        
         $sql = "SELECT * FROM planningRules 
-                WHERE minAge <= {$patientProfile->getMinAge()} 
-                  AND maxAge >= {$patientProfile->getMaxAge()} 
-                  AND minBMI <= {$patientProfile->getMinBMI()}
-                  AND maxBMI >= {$patientProfile->getMaxBMI()}
+                WHERE minAge <= {$patientProfile->getAge()} 
+                  AND maxAge >= {$patientProfile->getAge()} 
+                  AND minBMI <= {$patientProfile->getBMI()}
+                  AND maxBMI >= {$patientProfile->getBMI()}
                   AND genderId = {$patientProfile->getGender()}
                   AND diabetesTypeId = {$patientProfile->getDiabetesType()}
                   AND lifestyleId = {$patientProfile->getLifestyle()}";
-
         $result = mysql_query($sql);
         if (!$result)
             return false;

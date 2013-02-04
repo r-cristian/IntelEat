@@ -15,7 +15,7 @@ class Diet {
         $patient = new PatientProfile();
         $patient->load($patientId);
 
-        $rules = AssessmentRule::getAll();
+        $rules = AssessmentRule::getAll();       
         $dishes = Dish::getAll();
         $allNutrients = DishNutrient::getAllNutrients();
         $allPrepModes = PreparationMode::getAll();
@@ -30,22 +30,25 @@ class Diet {
                 $addDish = true;
 
                 if (strpos($rule->getText(), 'nutrient')) {
-                    $parts = explode("dish.nutrient.", $rule->getText());
+                    $parts = explode("dish.nutrient", $rule->getText());
                     $processedRule = implode($parts);
+                 
                     foreach ($allNutrients as $key => $nutrient) {
-                        if (strpos($processedRule, $key) > 0) {
+                        if (strpos($processedRule, '.' . $key) > 0) {
+                   
                             if (key_exists($key, $dishNutrients)) {
-                                str_replace($key, $dishNutrients[$key]->getQuantity(), $processedRule);
+                              $processedRule =  str_replace('.' . $key, $dishNutrients[$key]->getQuantity(), $processedRule);
+                              
                             } else {
                                 $processedRule = "return false;";
                             }
                         }
                     }
                 } elseif (strpos($rule->getText(), 'preparationMode')) {
-                    $parts = explode("dish.preparationMode.", $rule->getText());
+                    $parts = explode("dish.preparationMode", $rule->getText());
                     $processedPrepRule = implode($parts);
                     foreach ($allPrepModes as $key => $prepMode) {
-                        if (strpos($processedPrepRule, $key > 0)) {
+                        if (strpos($processedPrepRule, '.' . $key) > 0) {
                             if (key_exists($key, $dishPrepModes)) {
                                 $addDish = false;
                             }
@@ -113,7 +116,7 @@ class Diet {
     public static function planWeeklyDiet($dishes, PlanningRule $rule) {
         $counter = 1;
         $dailyDiets = array();
-        while (count($dailyDiets) < 50) {
+        while (count($dailyDiets) < 25) {
             $dailyDiets[$counter] = self::planDailyDietWORestrictions($dishes, $rule);
             $counter++;
         }
@@ -143,10 +146,11 @@ class Diet {
                 }
 
                 if (!$duplicates && $drinksCounter <= 3 && $drinksCounter > 0 && $snacksCounter == 3 && $mainDishesCounter > 2) {
-                    $goodDiets[++count($goodDiets)] = $dayDiet;
+                    $goodDietsCounter = count($goodDiets) + 1;
+                    $goodDiets[count($goodDietsCounter)] = $dayDiet;
                     $dishesArray = $dishesArray + $dayDiet;
                 }
-                if (count($goodDiets == 7)) {
+                if (count($goodDiets) == 2) {
                     break;
                 }
             }
@@ -157,11 +161,13 @@ class Diet {
 
     public static function getDiet($patientId) {
         $dishes = self::assessDishes($patientId);
+      
         $patient = new PatientProfile();
         $patient->load($patientId);
-        
+
         $rule = $patient->getPlanningRule();
-        if($rule->getProvideDiet() == 0){
+        var_dump($rule);
+        if ($rule->getProvideDiet() == 0) {
             return $rule->getHint();
         }
 

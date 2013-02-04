@@ -1,7 +1,11 @@
 <?php
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 include_once('Classes/HelpClass.php');
 include_once('Classes/Dish.php');
 include_once('Classes/PreparationMode.php');
+include_once('Classes/Diet.php');
+
 include_once('Classes/DishNutrient.php');
 include_once('Classes/PatientProfile.php');
 
@@ -16,6 +20,7 @@ if (isset($_GET['patient'])) {
     $patient = new PatientProfile();
     $patient->load($_GET['patient']);
 }
+
 if ($patient) {
     $diets = Diet::getDiet($_GET['patient']);
     $hint = null;
@@ -43,23 +48,23 @@ if ($patient) {
         </h1>
         </br>
         </br>
-        <?php if ($patient): ?>
+<?php if ($patient): ?>
             <b>Patient Profile:</b>
             <ul>
                 <li>  
-                    <?php echo $genders[$patient->getGender()]; ?>
+    <?php echo $genders[$patient->getGender()]; ?>
                 </li>
                 <li>
-                    <?php echo $patient->getHeight() . ' cm'; ?>
+    <?php echo $patient->getHeight() . ' cm'; ?>
                 </li>
                 <li>
-                    <?php echo $patient->getWeight() . ' kg'; ?>
+    <?php echo $patient->getWeight() . ' kg'; ?>
                 </li>
                 <li>
-                    <?php echo $lifestyles[$patient->getLifestyle()]; ?>
+    <?php echo $lifestyles[$patient->getLifestyle()]; ?>
                 </li>       
                 <li>
-                    <?php echo 'Diabetes ' . $diabetesTypes[$patient->getDiabetesType()]; ?>
+    <?php echo 'Diabetes ' . $diabetesTypes[$patient->getDiabetesType()]; ?>
                 </li>
             </ul>
 
@@ -87,10 +92,10 @@ if ($patient) {
                     ?>
                 </tbody>
             </table>
-        <?php endif ?>
+<?php endif ?>
         </br>
         </br>
-        <?php if (isset($hint) && !empty($hint)): ?>
+<?php if (isset($hint) && !empty($hint)): ?>
             <h2>Profile advice: </h2> </br>
             <span <?php if (!isset($diets)) echo 'style="color:red;"' ?>><?php echo $hint; ?></span>
 
@@ -99,7 +104,7 @@ if ($patient) {
             <?php foreach ($diets as $day => $dishes): ?>                
                 <?php if ($patient): ?>
                     <h2>Day <?php echo $day; ?></h2>
-                <?php endif; ?>
+        <?php endif; ?>
                 <table class="list">
                     <tbody>
                         <tr>
@@ -154,6 +159,6 @@ if ($patient) {
                     </tbody>                
                 </table>  
             <?php endforeach; ?>
-        <?php endif; ?>
+<?php endif; ?>
     </body>
 </html>

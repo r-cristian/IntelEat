@@ -74,7 +74,7 @@ class PatientProfile {
     }
     
     public function getBMI(){
-        return $this->height / ($this->weight * $this->weight);
+        return $this->height / ($this->weight * $this->weight) * 1000;
     }
     
     public function getPlanningRule(){

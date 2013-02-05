@@ -70,9 +70,7 @@ class DishNutrient {
         $result = mysql_query($sql);
         if (!$result)
             return false;
-        $row = mysql_fetch_assoc($result);
-        if (!$result)
-            return false;
+
         $nutrients = array();
         while ($row = mysql_fetch_assoc($result)) {
             $nutrients[$row['nutrient']] = new DishNutrient();

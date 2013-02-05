@@ -24,6 +24,8 @@ $patients = PatientProfile::getAll();
         </h1>
         </br>
         </br>
+ <a href="index.php" >Homepage...</a>
+ </br></br>
         <table class="list">
             <tbody>
                 <tr>
@@ -80,6 +82,7 @@ $patients = PatientProfile::getAll();
                 }
                 ?>  
             </tbody>                
-        </table>       
+        </table>    </br></br>
+       
     </body>
 </html>

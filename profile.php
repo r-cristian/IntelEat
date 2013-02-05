@@ -69,6 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title></title>
+         <link rel="stylesheet" type="text/css" href="css/styles.css">
     </head>
     <body>
         <h1>  <?php echo!isset($patient) ? 'Add patient profile' : 'Edit patient profile' ?>
@@ -165,7 +166,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </table>
             </form>
         <?php else: ?>
-            <h1> You have successfully saved patient <b><?php echo $patient->getName() ?></b>!</h1>
+            <b> You have successfully saved patient <b><?php echo $patient->getName() ?></b>!</b>
+            </br>
             </br>
             <a href="<?php echo $redirectUrl . '?patient=' . $patient->getId() ?>"> Edit patient profile...</a>
         <?php endif ?>

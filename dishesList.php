@@ -1,6 +1,8 @@
 <?php
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
+ini_set('max_execution_time', 300);
+
 include_once('Classes/HelpClass.php');
 include_once('Classes/Dish.php');
 include_once('Classes/PreparationMode.php');
@@ -30,6 +32,8 @@ if ($patient) {
     } else {
         $rule = $patient->getPlanningRule();
         $hint = $rule->getHint();
+        $recommendedKCals = $rule->getKCal();
+        $recommendedOtherValues = $rule->getOutputs();
     }
     $impNutrients = DishNutrient::getAllImportantNutrients();
 } else {
@@ -48,54 +52,62 @@ if ($patient) {
         </h1>
         </br>
         </br>
-<?php if ($patient): ?>
+        <a href="index.php" >Homepage...</a>
+ </br></br>
+        <?php if ($patient): ?>
             <b>Patient Profile:</b>
             <ul>
                 <li>  
-    <?php echo $genders[$patient->getGender()]; ?>
+                    <?php echo $genders[$patient->getGender()]; ?>
                 </li>
                 <li>
-    <?php echo $patient->getHeight() . ' cm'; ?>
+                    <?php echo $patient->getHeight() . ' cm'; ?>
                 </li>
                 <li>
-    <?php echo $patient->getWeight() . ' kg'; ?>
+                    <?php echo $patient->getWeight() . ' kg'; ?>
                 </li>
+                 <li>
+                   BMI:  <?php echo number_format($patient->getBMI(), 2); ?>
+                </li>  
                 <li>
-    <?php echo $lifestyles[$patient->getLifestyle()]; ?>
+                    <?php echo $lifestyles[$patient->getLifestyle()]; ?>
                 </li>       
                 <li>
-    <?php echo 'Diabetes ' . $diabetesTypes[$patient->getDiabetesType()]; ?>
+                    <?php echo 'Diabetes ' . $diabetesTypes[$patient->getDiabetesType()]; ?>
                 </li>
             </ul>
-
-            <table>
-                <tbody>                    
-                    <tr>
-                        <td>
-                            <b>Recommended values:</b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Calories
-                        </td>
-                    </tr>
-                    <?php
-                    if (count($impNutrients) > 0) {
-                        foreach ($impNutrients as $key => $nutrient) {
-                            echo "<tr>
-                                 <td>{$nutrient->getName()} ({$units[$nutrient->getUnit()]})
+            <?php if (isset($recommendedKCals)): ?>
+                <table>
+                    <tbody>                    
+                        <tr>
+                            <td style="padding-bottom:10px;">
+                                <b>Recommended values:</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                KCalories: aprox. <?php echo $recommendedKCals ?>
+                            </td>
+                        </tr>
+                        <?php
+                        if (count($impNutrients) > 0) {
+                            foreach ($impNutrients as $key => $nutrient) {
+                                if (isset($recommendedOtherValues[$key])) {
+                                    echo "<tr>
+                                 <td>{$nutrient->getName()} ({$units[$nutrient->getUnit()]}): {$recommendedOtherValues[$key]->getMinQuantity()} - {$recommendedOtherValues[$key]->getMaxQuantity()}
                                  </td>
                               </tr>";
+                                }
+                            }
                         }
-                    }
-                    ?>
-                </tbody>
-            </table>
-<?php endif ?>
+                        ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+        <?php endif ?>
         </br>
         </br>
-<?php if (isset($hint) && !empty($hint)): ?>
+        <?php if (isset($hint) && !empty($hint)): ?>
             <h2>Profile advice: </h2> </br>
             <span <?php if (!isset($diets)) echo 'style="color:red;"' ?>><?php echo $hint; ?></span>
 
@@ -103,8 +115,10 @@ if ($patient) {
         <?php if (isset($diets)): ?>
             <?php foreach ($diets as $day => $dishes): ?>                
                 <?php if ($patient): ?>
-                    <h2>Day <?php echo $day; ?></h2>
-        <?php endif; ?>
+                    <b>Day <?php echo $day; ?></b>
+                    </br>
+                    </br>
+                <?php endif; ?>
                 <table class="list">
                     <tbody>
                         <tr>
@@ -121,7 +135,7 @@ if ($patient) {
                                 Preparation Modes
                             </th>
                             <th>
-                                Calories
+                                KCalories
                             </th> 
                             <th>
                                 Nutrients
@@ -158,7 +172,9 @@ if ($patient) {
                         ?>  
                     </tbody>                
                 </table>  
+                    </br>
+                    </br>
             <?php endforeach; ?>
-<?php endif; ?>
+        <?php endif; ?>
     </body>
 </html>

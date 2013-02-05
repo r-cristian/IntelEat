@@ -110,6 +110,7 @@ if ($patient) {
         <?php if (isset($hint) && !empty($hint)): ?>
             <h2>Profile advice: </h2> </br>
             <span <?php if (!isset($diets)) echo 'style="color:red;"' ?>><?php echo $hint; ?></span>
+            </br></br>
 
         <?php endif; ?>
         <?php if (isset($diets)): ?>
